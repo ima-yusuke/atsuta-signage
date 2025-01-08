@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>三重大学紹介</title>
+    <title>愛知県立熱田高等学校</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -43,7 +43,7 @@
 
     {{--ヘッダー--}}
     <div class="fixed top-0 w-full flex items-center justify-center min-h-[8dvh]">
-        <h1 class="text-2xl text-white font-bold absolute left-[4%] top-1/2 transform -translate-y-1/2">三重大学紹介</h1>
+        <h1 class="text-2xl text-white font-bold absolute left-[4%] top-1/2 transform -translate-y-1/2">愛知県立熱田高等学校</h1>
         <aside class="flex items-center gap-4 absolute right-[2%] top-1/2 transform -translate-y-1/2">
             <div class="btn-wrap" id="btn1">
                 <a class="btn btn-switch"><span>全画面</span></a>

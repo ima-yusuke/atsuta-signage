@@ -60,19 +60,9 @@
         {{--スライド--}}
         <div class="swiper categorySwiper">
             <div class="swiper-wrapper">
-                <!-- Swiper Slides -->
-                <x-category-slide id="7" name="地域イノベーション学研究科" url="storage/img/category-06.jpg" />
-                <x-category-slide id="1" name="ドローン映像" url="storage/img/lab-01.jpg"/>
-                <x-category-slide id="2" name="工学部・研究科" url="storage/img/category-01.jpg"/>
-                {{--サイエンスフェスティバル用--}}
-{{--                <x-category-slide id="1" name="ドローン映像" url="storage/img/lab-01.jpg"/>--}}
-{{--                <x-category-slide id="2" name="工学部" url="storage/img/lab-02.jpg"/>--}}
-
-                {{--全学部用--}}
-                <x-category-slide id="3" name="教育学部・研究科" url="storage/img/category-02.jpg" />
-                <x-category-slide id="4" name="人文学部・研究科" url="storage/img/category-03.jpg" />
-                <x-category-slide id="5" name="医学部・研究科" url="storage/img/category-04.jpg" />
-                <x-category-slide id="6" name="生物資源学部・研究科" url="storage/img/category-05.jpg" />
+                @foreach($testArray as $value)
+                    <x-category-slide :id="$value['id']" :name="$value['name']" :url="'storage/img/' . $value['img']"/>
+                @endforeach
             </div>
         </div>
     </section>
@@ -81,96 +71,27 @@
     <section id="animation_container" class="hidden justify-center items-center h-full w-full">
         <div class="flex flex-col justify-center items-center">
             <p class="text-center"></p>
-            <img src="{{asset("storage/img/lab-01.jpg")}}" />
+            <img src="{{asset("storage/img/pic-01.jpg")}}" />
         </div>
     </section>
 
     {{--各コンテンツ--}}
     <section id="contents_container" class="hidden justify-center items-center h-full w-full py-20">
 
-        {{--工学部コンテンツ--}}
-        <div class="hidden swiper swiper-2 hideContainer" id="container_2">
-            <div class="swiper-wrapper">
-                <x-lab-video src="lab-01.mp4" img="lab-08.png"/>
-                <x-lab-video  src="test-video.MOV" img="lab-01.png"/>
-                <x-lab-video src="test-video.MOV" img="lab-02.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-03.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-04.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-05.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-06.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-07.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-09.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-10.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-11.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-12.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-13.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-14.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-16.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-17.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-18.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-19.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-20.png"/>
-                <x-lab-video src="lab-01.mp4" img="lab-21.png"/>
+        @foreach($testArray as $value)
+            <div class="hidden swiper swiper-{{$value['id']}} hideContainer" id="container_{{$value['id']}}">
+                <div class="swiper-wrapper flex flex-wrap gap-4 justify-center items-center">
+                    @if(empty($value['data']))
+                        <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
+                    @else
+                        @foreach($value['data'] as $data)
+                                <img src="{{asset("storage/img/" . $data['img'])}}" class="w-[40%]"/>
+                            </div>
+                        @endforeach
+                    @endif
+                </div>
             </div>
-        </div>
-
-        {{--教育学部コンテンツ--}}
-        <div class="hidden swiper swiper-3 hideContainer" id="container_3">
-            <div class="swiper-wrapper">
-{{--                <x-lab-video  src="test-video.MOV" img="lab-10.png"/>--}}
-{{--                <x-lab-video src="test-video.MOV" img="lab-11.png"/>--}}
-                <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
-            </div>
-        </div>
-
-        {{--人文学部コンテンツ--}}
-        <div class="hidden swiper swiper-4 hideContainer" id="container_4">
-            <div class="swiper-wrapper">
-{{--                <x-lab-video  src="test-video.MOV" img="lab-12.png"/>--}}
-{{--                <x-lab-video src="test-video.MOV" img="lab-13.png"/>--}}
-                <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
-            </div>
-        </div>
-
-        {{--医学系研究科コンテンツ--}}
-        <div class="hidden swiper swiper-5 hideContainer" id="container_5">
-            <div class="swiper-wrapper">
-{{--                <x-lab-video  src="test-video.MOV" img="lab-14.png"/>--}}
-{{--                <x-lab-video src="test-video.MOV" img="lab-20.png"/>--}}
-                <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
-            </div>
-        </div>
-
-        {{--生物資源学研究科コンテンツ--}}
-        <div class="hidden swiper swiper-6 hideContainer" id="container_6">
-            <div class="swiper-wrapper">
-{{--                <x-lab-video  src="test-video.MOV" img="lab-16.png"/>--}}
-{{--                <x-lab-video src="test-video.MOV" img="lab-17.png"/>--}}
-                <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
-            </div>
-        </div>
-
-        {{--地域イノベーション学研究科コンテンツ--}}
-        <div class="hidden swiper swiper-7 hideContainer" id="container_7">
-            <div class="swiper-wrapper">
-{{--                <x-lab-video  src="test-video.MOV" img="lab-18.png"/>--}}
-{{--                <x-lab-video src="test-video.MOV" img="lab-19.png"/>--}}
-                <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
-            </div>
-        </div>
-
-        {{--ビデオ（ドローン）--}}
-        <article class="hidden flex-col justify-center items-center gap-8 h-full min-w-full" id="video_container">
-            <video id="myVideo" class="w-[70%] max-h-[70dvh]" controls>
-                <source src="{{asset("storage/video/lab-01.mp4")}}" type="video/mp4">
-            </video>
-            <aside class="flex justify-center items-center gap-6">
-                <x-chapter-btn id="chapter1" title="最初から再生"></x-chapter-btn>
-                <x-chapter-btn id="chapter2" title="学内飛行映像"></x-chapter-btn>
-                <x-chapter-btn id="chapter3" title="自由飛行映像"></x-chapter-btn>
-            </aside>
-        </article>
-
+        @endforeach
     </section>
 <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@3/tsparticles.preset.links.bundle.min.js"></script>
 </body>

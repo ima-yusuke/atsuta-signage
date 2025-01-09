@@ -11,13 +11,6 @@ const ContentsContainer = document.getElementById("contents_container");
 const CategoryTitle = document.getElementById("category");
 const CloseContentsBtn = document.getElementById("close_contents_btn");
 
-// コンテンツ_ドローン
-const VideoContainer = document.getElementById("video_container");
-const VideoElement = document.getElementById("myVideo");
-const BtnChapter1 = document.getElementById("chapter1");
-const BtnChapter2 = document.getElementById("chapter2");
-const BtnChapter3 = document.getElementById("chapter3");
-
 // コンテンツ＿各学部
 let videos =document.getElementsByClassName("video");
 let thumbnail = document.getElementsByClassName('thumbnail');
@@ -76,28 +69,15 @@ for (let i = 0; i < CategorySlide.length; i++) {
 
         //カテゴリースライド非表示
         HideCategoryContainer();
-
-        if(e.currentTarget.id!=1) {
-            //学部動画表示
-            videoFlag =false;
-            if (!contentSwiper.destroyed) {
-                contentSwiper.destroy(true, true); // 破棄時にHTMLやCSSをリセット
-            }
-            if (contentSwiper.destroyed) {
-                contentSwiper = initializeContentSwiper(`.swiper-${e.currentTarget.id}`); // Swiper再生成
-            }
-            currentContainer = document.getElementById(`container_${e.currentTarget.id}`);
-            ShowContentVideos(currentContainer);
-        }else{
-            //ドローン動画表示
-            contentSwiper.destroy(true, true);
-            videoFlag = true;
-            ShowDroneContainer();
-            // チャプターボタンにイベントを設定
-            SetupChapterButton(BtnChapter1, 0);
-            SetupChapterButton(BtnChapter2, 123)
-            SetupChapterButton(BtnChapter3, 252);
+        videoFlag =false;
+        if (!contentSwiper.destroyed) {
+            contentSwiper.destroy(true, true); // 破棄時にHTMLやCSSをリセット
         }
+        if (contentSwiper.destroyed) {
+            contentSwiper = initializeContentSwiper(`.swiper-${e.currentTarget.id}`); // Swiper再生成
+        }
+        currentContainer = document.getElementById(`container_${e.currentTarget.id}`);
+        ShowContentVideos(currentContainer);
 
         const img = e.currentTarget.closest(".category-slide").querySelector("img");
         const text = e.currentTarget.closest(".category-slide").querySelector("p");
@@ -120,15 +100,9 @@ CloseContentsBtn.addEventListener("click", async function () {
     HideContentContainer();
     ShowCategoryContainer();
     AnimationSlide.style.left = '100%'; // 右端に移動
-
-    if (videoFlag) {
-        HideDroneContainer();
-        VideoElement.pause();
-    } else {
-        HideContentVideos(currentContainer);
-        for (let i = 0; i < videos.length; i++) {
-            videos[i].pause();
-        }
+    HideContentVideos(currentContainer);
+    for (let i = 0; i < videos.length; i++) {
+        videos[i].pause();
     }
 
     await Sleep(1000); // さらに1秒待機
@@ -282,47 +256,5 @@ function waitForFullscreen(videoElement) {
     });
 }
 
-// ドローン動画表示
-function ShowDroneContainer(){
-    VideoContainer.classList.remove("hidden");
-    VideoContainer.classList.add("flex");
-}
-
-// ドローン動画非表示
-function HideDroneContainer(){
-    VideoContainer.classList.add("hidden");
-    VideoContainer.classList.remove("flex");
-}
-
-// ドローン動画の再生が開始したらフルスクリーンにする
-VideoElement.addEventListener("play", async function () {
-    // フルスクリーンモードにする
-    if (VideoElement.requestFullscreen) {
-        await VideoElement.requestFullscreen();
-    }
-});
-
-//ドローン動画 チャプター時間設定
-function SetupChapterButton(button, time) {
-    button.addEventListener("click", async function () {
-        // 再生位置を設定
-        VideoElement.currentTime = time;
-
-        // フルスクリーンにする
-        if (VideoElement.requestFullscreen) {
-            await VideoElement.requestFullscreen();
-        }
-
-        // 動画を再生
-        VideoElement.play();
-    });
-}
-
-// ドローン動画の再生が終了したらフルスクリーンを終了
-VideoElement.addEventListener("ended", function () {
-    if (document.fullscreenElement) {
-        document.exitFullscreen();
-    }
-});
 
 

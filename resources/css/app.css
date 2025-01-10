@@ -10,16 +10,6 @@ body {
     /*background-color: #E9E9E9;*/
 }
 
-
-/* 方眼紙模様に必須のスタイル */
-.box {
-    background-image: linear-gradient(0deg, transparent calc(100% - 1px), #f0f0f0 calc(100% - 1px)),
-    linear-gradient(90deg, transparent calc(100% - 1px), #f0f0f0 calc(100% - 1px));
-    background-size: 16px 16px;
-    background-repeat: repeat;
-    background-position: center center;
-}
-
 #slide {
     position: fixed;
     top: 0;
@@ -135,12 +125,4 @@ a.btn-switch2:hover span {
     animation: btnFadeOut 1.5s ease-out forwards; /* 1.5秒で拡大・フェードアウト */
 }
 
-#tsparticles {
-    width: 100%;
-    height: 100vh;  /* 画面全体をカバー */
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1;  /* 他のコンテンツの背後に配置 */
-}
 

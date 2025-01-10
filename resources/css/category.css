@@ -13,20 +13,8 @@
     background-color: #E9E9E9;
 }
 
-.category-slide:hover {
-    transform: translateY(-4px); /* ホバー時に少し浮き上がらせる */
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2), 0px 4px 6px rgba(0, 0, 0, 0.15); /* 影を強調 */
-}
-
 .category-slide p{
     padding: 1%;
-}
-
-    /*メニュー画像*/
-.categorySwiper .swiper-slide img {
-    width: 100% !important;
-    height: 40dvh;
-    object-fit: cover;
 }
 
 /* アニメーションを定義 */

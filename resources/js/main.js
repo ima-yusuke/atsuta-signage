@@ -10,12 +10,6 @@ const CategorySlide = document.getElementsByClassName("category-slide");
 const ContentsContainer = document.getElementById("contents_container");
 const CategoryTitle = document.getElementById("category");
 const CloseContentsBtn = document.getElementById("close_contents_btn");
-
-// コンテンツ＿各学部
-let videos =document.getElementsByClassName("video");
-let thumbnail = document.getElementsByClassName('thumbnail');
-let imgIdx = 0;
-let thumbnailFlag = false;
 let currentContainer = null;
 
 // 遷移アニメーション
@@ -23,8 +17,6 @@ const AnimationContainer = document.getElementById("animation_container");
 const AnimationSlide = document.getElementById('slide');
 const ImgElement = AnimationContainer.querySelector("img");
 const TextElement = AnimationContainer.querySelector("p");
-
-let videoFlag = false;
 
 // Initialize Swiper with configuration
 const categorySwiper = new Swiper('.categorySwiper', {
@@ -55,7 +47,6 @@ function initializeContentSwiper(className) {
 }
 
 let contentSwiper = initializeContentSwiper(".swiper-2");//デフォルト
-let currentSlideIndex = contentSwiper.activeIndex;
 
 // カテゴリースライドをクリックしたときの処理
 for (let i = 0; i < CategorySlide.length; i++) {
@@ -69,7 +60,7 @@ for (let i = 0; i < CategorySlide.length; i++) {
 
         //カテゴリースライド非表示
         HideCategoryContainer();
-        videoFlag =false;
+
         if (!contentSwiper.destroyed) {
             contentSwiper.destroy(true, true); // 破棄時にHTMLやCSSをリセット
         }
@@ -101,9 +92,6 @@ CloseContentsBtn.addEventListener("click", async function () {
     ShowCategoryContainer();
     AnimationSlide.style.left = '100%'; // 右端に移動
     HideContentVideos(currentContainer);
-    for (let i = 0; i < videos.length; i++) {
-        videos[i].pause();
-    }
 
     await Sleep(1000); // さらに1秒待機
 
@@ -195,66 +183,6 @@ function HideContentVideos(container){
     container.classList.remove("contentSwiper");
 }
 
-// 各学部動画のサムネイルをクリックしたときの処理
-for (let i = 0; i < thumbnail.length; i++) {
-    thumbnail[i].addEventListener('click', function () {
-        currentSlideIndex = contentSwiper.activeIndex;
-        thumbnail[i].style.display = 'none';
-        imgIdx = i;
-        thumbnailFlag = true;
-        const video = thumbnail[i].nextElementSibling;
-        video.style.display = 'block'; //動画を表示
-        startFullscreenAndObserve(video);
-    });
-}
-
-async function startFullscreenAndObserve(videoElement) {
-    try {
-        // フルスクリーンを開始
-        await videoElement.requestFullscreen();
-
-        // フルスクリーンの切り替え完了を待つ
-        await waitForFullscreen(videoElement);
-
-        // 再生開始
-        await videoElement.play();
-
-        // サイズ変更を監視する ResizeObserver をセットアップ
-        const resizeObserver = new ResizeObserver(() => {
-             if (!document.fullscreenElement) {
-                 videoElement.pause(); // 動画を停止
-                 thumbnail[imgIdx].style.display = 'block';
-                 thumbnailFlag = false;
-                 contentSwiper.slideTo(currentSlideIndex, 0); // 変更なしの位置に戻す
-                 resizeObserver.disconnect(); // ResizeObserver を停止
-             }
-        });
-        resizeObserver.observe(videoElement);
-
-        // フルスクリーン終了時の処理
-        document.addEventListener("fullscreenchange", () => {
-            videoElement.pause(); // 動画を停止
-            thumbnail[imgIdx].style.display = 'block';
-            thumbnailFlag = false;
-            contentSwiper.slideTo(currentSlideIndex, 0); // 変更なしの位置に戻す
-            resizeObserver.disconnect(); // ResizeObserver を停止
-        });
-    } catch (error) {
-        console.error("フルスクリーンモードの開始に失敗しました:", error);
-    }
-}
-
-function waitForFullscreen(videoElement) {
-    return new Promise((resolve) => {
-        const onFullscreenChange = () => {
-            if (document.fullscreenElement === videoElement) {
-                document.removeEventListener("fullscreenchange", onFullscreenChange);
-                resolve(); // フルスクリーン化完了を通知
-            }
-        };
-        document.addEventListener("fullscreenchange", onFullscreenChange);
-    });
-}
 
 
 

@@ -45,7 +45,7 @@ const categorySwiper = new Swiper('.categorySwiper', {
 // 各学部Swiperの初期化を関数化
 function initializeContentSwiper(className) {
     return new Swiper(className, {
-        slidesPerView: 3, // 1行に表示するスライド数
+        slidesPerView: 2, // 1行に表示するスライド数
         centeredSlides: false,
         grid: {
             rows: 2, // 縦に並べる数

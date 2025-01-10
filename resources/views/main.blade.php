@@ -80,13 +80,12 @@
 
         @foreach($testArray as $value)
             <div class="hidden swiper swiper-{{$value['id']}} hideContainer" id="container_{{$value['id']}}">
-                <div class="swiper-wrapper flex flex-wrap gap-4 justify-center items-center">
+                <div class="swiper-wrapper">
                     @if(empty($value['data']))
                         <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
                     @else
                         @foreach($value['data'] as $data)
-                                <img src="{{asset("storage/img/" . $data['img'])}}" class="w-[40%]"/>
-                            </div>
+                            <img src="{{asset("storage/img/" . $data['img'])}}" class="w-full swiper-slide"/>
                         @endforeach
                     @endif
                 </div>

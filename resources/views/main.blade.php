@@ -91,12 +91,11 @@
                 const player = new YT.Player(element, {
                     height: '360',
                     width: '640',
-                    host: 'https://www.youtube.com', // ?enablejsapi=1 を自動的に追加
                     videoId: element.getAttribute('data-id'), // 動画 ID を取得
                     playerVars: {
                         enablejsapi: 1,   // API を有効化
-                        fs: 1,            // フルスクリーンを許可
-                        playsinline: 1,   // モバイルデバイスでインライン再生
+                        controls: 0,      // コントロールバーを非表示にする
+                        rel: 0,           // 終了時に関連動画を表示しない
                     },
                     events: {
                         'onStateChange': (event) => onPlayerStateChange(event, player),
@@ -108,7 +107,6 @@
         function onPlayerStateChange(event,player) {
             if (event.data === YT.PlayerState.PLAYING) { // 再生開始時
                 const iframe = player.getIframe(); // プレイヤーの iframe 要素を取得
-                // iframe.contentWindow.postMessage('{"event":"command","func":"setFullscreen","args":true}', '*');
 
                 if (iframe.requestFullscreen) {
                     iframe.requestFullscreen(); // フルスクリーンモードに切り替え

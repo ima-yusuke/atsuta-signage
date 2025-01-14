@@ -71,8 +71,19 @@
                     @if(empty($value['data']))
                         <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
                     @else
-                        @foreach($value['data'] as $data)
-                            <div class="swiper-slide youtubePlayer" data-id="{{$data['url']}}"></div>
+                        @foreach($value['data'] as $idx=>$data)
+                            <div class="video-container relative swiper-slide overflow-hidden">
+                                <!-- Thumbnail Image -->
+                                <img
+                                    src="{{ asset('storage/img/' . $data['img']) }}"
+                                    alt="Video Thumbnail"
+                                    class="thumbnail object-cover m-auto w-full h-full cursor-pointer absolute top-0 left-0 z-10"
+                                    onclick="playVideo(this,{{$idx}})"
+                                >
+
+                                <!-- YouTube Player -->
+                                <div class="youtubePlayer w-full h-auto" data-id="{{$data['url']}}" style="display: none;"></div>
+                            </div>
                         @endforeach
                     @endif
                 </div>
@@ -84,6 +95,9 @@
         tag.src = "https://www.youtube.com/iframe_api";
         let firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        let playerArray = [];
+        let thumbnailImgElement = null;
 
         function onYouTubeIframeAPIReady() {
             const elements = document.querySelectorAll('.youtubePlayer');
@@ -101,6 +115,7 @@
                         'onStateChange': (event) => onPlayerStateChange(event, player),
                     },
                 });
+                playerArray.push(player);
             });
         }
 
@@ -114,6 +129,21 @@
             }else if (event.data === YT.PlayerState.PAUSED || event.data === YT.PlayerState.ENDED) {
                 // 再生停止または終了時にフルスクリーン解除
                 document.exitFullscreen();
+                thumbnailImgElement.style.display = 'block';
+                thumbnailImgElement.nextElementSibling.style.display = 'none';
+            }
+        }
+
+        function playVideo(imgElement) {
+            thumbnailImgElement = imgElement;
+            const youtubePlayer = imgElement.nextElementSibling;
+            imgElement.style.display = 'none';
+            youtubePlayer.style.display = 'block';
+            for (let i = 0; i < playerArray.length; i++) {
+                if (playerArray[i].options.videoId===youtubePlayer.getAttribute('data-id')) {
+                    youtubePlayer.requestFullscreen();
+                    playerArray[i].playVideo();
+                }
             }
         }
     </script>

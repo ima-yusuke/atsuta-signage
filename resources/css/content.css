@@ -19,3 +19,7 @@
     display: none !important;
 }
 
+.thumbnail {
+    aspect-ratio: 16 / 9 !important; /* 16:9 の比率を指定 */
+}
+

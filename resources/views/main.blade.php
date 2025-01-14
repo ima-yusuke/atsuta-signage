@@ -37,7 +37,7 @@
                 <a class="btn btn-switch"><span>全画面</span></a>
             </div>
             <div class="btn-wrap hidden" id="close_contents_btn">
-                <a class="btn btn-switch2"><span>閉じる</span></a>
+                <a class="btn btn-switch2"><span>戻る</span></a>
             </div>
         </aside>
         <p id="category" class="hidden text-xl text-white font-bold border-b border-solid border-white"></p>
@@ -131,6 +131,7 @@
                 document.exitFullscreen();
                 thumbnailImgElement.style.display = 'block';
                 thumbnailImgElement.nextElementSibling.style.display = 'none';
+                player.seekTo(0, true); // 動画を最初の0秒
             }
         }
 

@@ -14,6 +14,13 @@
   background-color: #E9E9E9;
 }
 
+/*メニュー画像*/
+.categorySwiper .swiper-slide img {
+  width: 100% !important;
+  height: 40dvh;
+  object-fit: cover;
+}
+
 .category-slide p {
   padding: 1%;
 }

@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-col justify-center items-center w-full py-12">
         <!-- カテゴリー一覧表示 -->
-        <div id="category-list" class="flex flex-col w-10/12 mt-8">
+        <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 mt-8">
             @foreach ($categories as $category)
                 <button class="categories flex w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200">
                     <span class="w-full">{{ $category->name }}</span>
@@ -15,15 +15,15 @@
                             <div class="flex flex-col w-full mt-3">
                                 <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                 <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="name_{{ $category->id }}" class="pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー名：</label>
-                                    <input type="text" name="name" id="name_{{ $category->id }}" value="{{ $category->name }}" class="md:w-2/3 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                    <label for="name_{{ $category->id }}" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー名：</label>
+                                    <input type="text" name="name" id="name_{{ $category->id }}" value="{{ $category->name }}" class="lg:w-96 md:w-72 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
                                 </div>
                             </div>
                             <div class="flex flex-col w-full mt-12">
                                 <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                 <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="img_{{ $category->id }}" class="pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー画像：</label>
-                                    <input type="file" name="img" id="img_{{ $category->id }}" class="max-md:w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
+                                    <label for="img_{{ $category->id }}" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー画像：</label>
+                                    <input type="file" name="img" id="img_{{ $category->id }}" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
                                 </div>
                             </div>
                         </div>
@@ -36,23 +36,23 @@
             @endforeach
         </div>
         {{--新規カテゴリー追加--}}
-        <div class="flex flex-col w-10/12 border border-solid border-gray-200 bg-white md:px-10 md:py-3 px-2 py-1">
-            <p class="text-xl font-bold ps-8 pt-5">新規属性カテゴリー追加</p>
+        <div class="flex flex-col w-11/12 lg:w-10/12 border border-solid border-gray-200 bg-white md:px-10 md:py-3 px-2 py-1">
+            <p class="text-xl font-bold max-md:ps-8 pt-5">新規属性カテゴリー追加</p>
             <form action="{{ route('AddCategory') }}" method="POST" enctype="multipart/form-data" class="flex max-md:flex-col">
                 @csrf
                 <div class="flex flex-col w-full pt-8 pb-4">
                     <div class="flex flex-col w-full">
                         <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                         <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                            <label for="category" class="pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>新規カテゴリー名：</label>
-                            <input type="text" name="name" id="category" class="md:w-5/12 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" placeholder="新規カテゴリー名" />
+                            <label for="category" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>新規カテゴリー名：</label>
+                            <input type="text" name="name" id="category" class="lg:w-96 md:w-72 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" placeholder="新規カテゴリー名" />
                         </div>
                     </div>
                     <div class="flex flex-col w-full mt-12">
                         <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                         <div class="flex flex-col md:flex-row items-center mt-1">
-                            <label for="img" class="pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>新規カテゴリー画像：</label>
-                            <input type="file" name="img" id="img" class="max-md:w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500">
+                            <label for="img" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>新規カテゴリー画像：</label>
+                            <input type="file" name="img" id="img" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500">
                         </div>
                     </div>
                 </div>

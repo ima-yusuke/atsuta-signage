@@ -1,15 +1,14 @@
 <x-app-layout>
     <div class="flex flex-col justify-center items-center w-full py-12">
         <!-- カテゴリー一覧表示 -->
-        <div id="category-list" class="flex flex-col w-10/12 mt-8 border border-solid border-gray-200 bg-white">
+        <div id="category-list" class="flex flex-col w-10/12 mt-8">
             @foreach ($categories as $category)
-                <button class="categories flex w-full text-left px-10 py-6 bg-white font-bold text-xl hover:bg-gray-200">
+                <button class="categories flex w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200">
                     <span class="w-full">{{ $category->name }}</span>
                     <i class="bi bi-chevron-up hidden text-2xl me-10"></i>
                     <i class="bi bi-chevron-down text-2xl me-10"></i>
-
                 </button>
-                <div class="hidden px-10 py-3 bg-white border-t">
+                <div class="hidden px-10 py-3 bg-white border-t border-solid">
                     <form action="{{ route('UpdateCategory', $category->id) }}" method="POST" enctype="multipart/form-data" class="flex w-full h-full">
                         @csrf
                         <div class="flex flex-col pb-4">

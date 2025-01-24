@@ -9,7 +9,7 @@
             </a>
         </div>
         <div class="flex flex-col justify-center items-center shadow-xl text-center border-4 border-solid border-black bg-white w-[80%] md:w-[30%]">
-            <a href="" class="w-full h-full hover:bg-black hover:text-white p-3">
+            <a href="{{ route('ShowContent') }}" class="w-full h-full hover:bg-black hover:text-white p-3">
                 <div class="flex flex-col gap-2">
                     <p class="py-2"><i class="bi bi-collection-play text-5xl"></i></p>
                     <p class="font-bold md:text-xl">コンテンツ追加</p>

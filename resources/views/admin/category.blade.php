@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="flex flex-col justify-center items-center w-full py-12">
         <!-- カテゴリー一覧表示 -->
-        <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 mt-8">
+        <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 mt-20">
             @foreach ($categories as $category)
                 <button class="categories flex w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200">
                     <span class="w-full">{{ $category->name }}</span>

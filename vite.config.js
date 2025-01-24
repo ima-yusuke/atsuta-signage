@@ -27,6 +27,7 @@ export default defineConfig({
                 particle: 'resources/js/particle.js',
                 screenSize: 'resources/js/screen-size.js',
                 adminCategory: 'resources/js/admin/category.js',
+                adminContent: 'resources/js/admin/content.js',
             }
         }
     }

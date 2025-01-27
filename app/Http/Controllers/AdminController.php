@@ -181,7 +181,8 @@ class AdminController extends Controller {
             'img' => 'サムネイル画像',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator, 'update')->withInput();
+            session()->flash('select_category', $request->input('category_id'));
+            return redirect()->back()->withErrors($validator, 'update' . $id)->withInput();
         }
 
         DB::beginTransaction();
@@ -212,19 +213,22 @@ class AdminController extends Controller {
                 }
                 $content->save();
                 DB::commit();
+                session()->flash('select_category', $request->input('category_id'));
                 return redirect()->back()->with('success', '動画コンテンツを更新しました。');
             } else {
                 DB::rollBack();
+                session()->flash('select_category', $request->input('category_id'));
                 return redirect()->back()->with('error', '動画コンテンツが見つかりません。');
             }
         } catch (\Exception $e) {
             DB::rollback();
             Log::error($e);
+            session()->flash('select_category', $request->input('category_id'));
             return redirect()->back()->with('error', '動画コンテンツ更新中にエラーが発生しました。');
         }
     }
 
-    // [削除] カテゴリー
+    // [削除] コンテンツ
     public function DeleteContent($id) {
         DB::beginTransaction();
         try {
@@ -236,14 +240,17 @@ class AdminController extends Controller {
                 }
                 $content->delete();
                 DB::commit();
+                session()->flash('select_category', $content->category_id);
                 return redirect()->back()->with('success', '動画コンテンツを削除しました。');
             } else {
                 DB::rollBack();
+                session()->flash('select_category', $content->category_id);
                 return redirect()->back()->with('error', '動画コンテンツが見つかりません。');
             }
         } catch (\Exception $e) {
             DB::rollback();
             Log::error($e);
+            session()->flash('select_category', $content->category_id);
             return redirect()->back()->with('error', '動画コンテンツ削除中にエラーが発生しました。');
         }
     }

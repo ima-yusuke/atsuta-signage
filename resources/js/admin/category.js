@@ -28,13 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorAccordions = document.querySelectorAll('.has-error');
     if (errorAccordions.length > 0) {
         errorAccordions.forEach(accordion => {
-            const button = accordion.previousElementSibling; // アコーディオンボタン
+            const button = accordion.previousElementSibling;
             if (button) {
                 const icons = button.querySelectorAll('i');
-                icons.forEach(icon => icon.classList.toggle('hidden')); // アイコン切り替え
-                button.classList.toggle('mb-2'); // ボタンのマージン調整
+                icons.forEach(icon => icon.classList.toggle('hidden'));
+                button.classList.toggle('mb-2');
             }
-            accordion.classList.toggle('hidden'); // 表示状態を切り替え
+            accordion.classList.toggle('hidden');
             accordion.classList.toggle('flex');
 
             // 最初のエラー箇所にスクロール移動
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const errorNewContent = document.getElementById('error-new-content');
+    const errorNewContent = document.getElementById('error-new-category');
     if (errorNewContent) {
         errorNewContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }

@@ -1,5 +1,6 @@
 import '/resources/js/app.js';
 
+// アコーディオンの切り替え
 document.querySelectorAll('.video-contents').forEach(button => {
     button.addEventListener('click', () => {
         const icons = button.querySelectorAll('i');
@@ -15,6 +16,7 @@ document.querySelectorAll('.video-contents').forEach(button => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+    // カテゴリー切り替え
     const categoryItems = document.querySelectorAll(".category-item");
     const newContent = document.getElementById('new-content');
 
@@ -49,4 +51,37 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     });
+
+    // 閉じるボタンのクリックイベント
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', () => {
+            const alertArea = button.closest('.alert-area');
+            alertArea.remove();
+        });
+    });
+
+    // カテゴリー選択時の初期表示
+    const selectedCategoryId = document.getElementById('selected-category').getAttribute('data-selected-category');
+    if (selectedCategoryId) {
+        const button = document.getElementById('category-list-' + selectedCategoryId);
+        button.click();
+    }
+
+    // エラー時に該当アコーディオンを開く処理
+    const errorAccordions = document.querySelectorAll('.has-error');
+    if (errorAccordions.length > 0) {
+        errorAccordions.forEach(accordion => {
+            const button = accordion.previousElementSibling;
+            if (button) {
+                const icons = button.querySelectorAll('i');
+                icons.forEach(icon => icon.classList.toggle('hidden'));
+                button.classList.toggle('mb-2');
+            }
+            accordion.classList.toggle('hidden');
+            accordion.classList.toggle('flex');
+
+            // 最初のエラー箇所にスクロール移動
+            accordion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
 });

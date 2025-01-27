@@ -1,4 +1,5 @@
 <x-app-layout>
+    @php()
     <div class="flex flex-col justify-center items-center w-full py-12">
         <!-- カテゴリー一覧表示 -->
         <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 md:mt-20 mt-8">
@@ -31,7 +32,7 @@
                     <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
                 </button>
                 <div class="hidden md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $category->id)->has('name') || $errors->getBag('update' . $category->id)->has('img')) has-error @endif">
-                    @if ($errors->getBag('update' . $category->id)->has('name'))
+                    @if ($errors->getBag('update' . $category->id)->has('name') || $errors->getBag('update' . $category->id)->has('img'))
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
                             <strong class="font-bold">入力された内容にエラーがあります。</strong>
                         </div>
@@ -70,7 +71,7 @@
         </div>
         {{--新規カテゴリー追加--}}
         <div class="flex flex-col w-11/12 lg:w-10/12 border border-solid border-gray-200 bg-white md:px-10 md:py-3 px-2 py-1">
-            <p @if($errors->add->any()) id="error-new-content" @endif class="text-xl font-bold max-md:ps-8 pt-5">新規属性カテゴリー追加</p>
+            <p @if($errors->add->any()) id="error-new-category" @endif class="text-xl font-bold max-md:ps-8 pt-5">新規カテゴリー追加</p>
             @if ($errors->add->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
                     <strong class="font-bold">入力された内容にエラーがあります。</strong>

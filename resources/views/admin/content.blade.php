@@ -14,7 +14,7 @@
         </div>
         <div class="w-2/12"></div>
         {{--コンテンツ一覧表示--}}
-        <div id="content-list" class="flex flex-col w-9/12 lg:w-8/12 mt-32 mx-auto">
+        <div id="content-list" class="flex flex-col w-9/12 lg:w-8/12 md:mt-32 mt-12 mx-auto">
             @if (session('success'))
                 <div id="success-alert" class="alert-area bg-green-100 border border-green-400 text-green-700 px-10 py-3 mb-4 rounded relative" role="alert">
                     <strong class="font-bold">{{ session('success') }}</strong>
@@ -38,6 +38,7 @@
                 </div>
             @endif
             {{--新規登録--}}
+            <p id="category-title-new" class="text-2xl font-bold text-start mb-8">動画コンテンツ追加</p>
             <div id="new-content" class="md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid">
                 @if ($errors->add->any())
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
@@ -98,15 +99,24 @@
                     </div>
                 </form>
             </div>
+            @php
+                $lastCategoryId = null; // 直前のカテゴリーID
+            @endphp
             {{--既存コンテンツ--}}
             @foreach ($contents as $content)
+                @if ($lastCategoryId !== $content->category_id)
+                    <p id="category-title-{{ $content->category_id }}" class="hidden category-title text-2xl font-bold text-start mb-8">{{ $content->category->name }}</p>
+                    @php
+                        $lastCategoryId = $content->category_id;
+                    @endphp
+                @endif
                 <button class="hidden video-contents w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200" data-content-category-id="{{ $content->category_id }}">
                     <span class="w-full">{{ $content->name }}</span>
                     <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>
                     <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
                 </button>
-                <div class="hidden content-details md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $content->id)->has('name') || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url') || $errors->getBag('update' . $content->id)->has('category_id')) has-error @endif">
-                    @if ($errors->getBag('update' . $content->id)->has('name') || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url') || $errors->getBag('update' . $content->id)->has('category_id'))
+                <div class="hidden content-details md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id')) has-error @endif">
+                    @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id'))
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
                             <strong class="font-bold">入力された内容にエラーがあります。</strong>
                         </div>
@@ -132,9 +142,9 @@
                                 <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                 <div class="flex flex-col w-full md:flex-row items-center mt-1">
                                     <label for="name_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画名：</label>
-                                    <input type="text" name="name" id="name_{{ $content->id }}" value="{{ old('name', $content->name) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                    <input type="text" name="name_{{ $content->id }}" id="name_{{ $content->id }}" value="{{ old('name_' . $content->id, $content->name) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
                                 </div>
-                                @error('name', 'update' . $content->id)
+                                @error('name_' . $content->id, 'update' . $content->id)
                                 <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
                                 @enderror
                             </div>
@@ -142,9 +152,9 @@
                                 <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                 <div class="flex flex-col w-full md:flex-row items-center mt-1">
                                     <label for="url_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画URL：</label>
-                                    <input type="text" name="url" id="url_{{ $content->id }}" value="{{ old('url', $content->url) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                    <input type="text" name="url_{{ $content->id }}" id="url_{{ $content->id }}" value="{{ old('url_' . $content->id, $content->url) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
                                 </div>
-                                @error('url', 'update' . $content->id)
+                                @error('url_' . $content->id, 'update' . $content->id)
                                 <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
                                 @enderror
                             </div>

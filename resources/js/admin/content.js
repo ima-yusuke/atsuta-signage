@@ -19,16 +19,23 @@ document.addEventListener("DOMContentLoaded", () => {
     // カテゴリー切り替え
     const categoryItems = document.querySelectorAll(".category-item");
     const newContent = document.getElementById('new-content');
+    const allCategoryTitles = document.querySelectorAll('.category-title');  // 全てのカテゴリタイトルを取得
 
     categoryItems.forEach((item) => {
         item.addEventListener("click", () => {
             // data-category-id属性からカテゴリーIDを取得
             const categoryId = item.getAttribute("data-category-id");
+            const categoryTitleNew = document.getElementById('category-title-new');
             document.querySelectorAll('.video-contents').forEach(button => {
+                const categoryTitle = document.getElementById('category-title-' + categoryId);
                 const contentCategoryId = button.getAttribute('data-content-category-id');
                 const contentDetails = button.nextElementSibling;
                 const show = document.querySelectorAll('.bi-chevron-down');
                 const none = document.querySelectorAll('.bi-chevron-up');
+                categoryTitleNew.classList.add('hidden');
+                if (categoryTitle) {
+                    categoryTitle.classList.add('hidden');
+                }
                 button.classList.remove('flex');
                 button.classList.add('hidden');
                 button.classList.add('mb-2');
@@ -41,12 +48,27 @@ document.addEventListener("DOMContentLoaded", () => {
                     icon.classList.add('hidden');
                 });
                 if (categoryId === contentCategoryId) {
+                    if (categoryTitle) {  // categoryTitleが存在する場合のみ表示
+                        categoryTitle.classList.remove('hidden');
+                    }
                     button.classList.remove('hidden');
                     button.classList.add('flex');
                 }
             });
+
+            // 他のカテゴリータイトルを非表示に
+            allCategoryTitles.forEach(title => {
+                if (title.id !== 'category-title-' + categoryId) {
+                    title.classList.add('hidden');
+                } else {
+                    title.classList.remove('hidden');
+                }
+            });
+
+            // 新規コンテンツの表示
             newContent.classList.add('hidden');
             if (categoryId === '0') {
+                categoryTitleNew.classList.remove('hidden');
                 newContent.classList.remove('hidden');
             }
         });

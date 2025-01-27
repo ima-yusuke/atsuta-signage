@@ -48,8 +48,8 @@
         {{--スライド--}}
         <div class="swiper categorySwiper">
             <div class="swiper-wrapper">
-                @foreach($testArray as $value)
-                    <x-category-slide :id="$value['id']" :name="$value['name']" :url="'storage/img/' . $value['img']"/>
+                @foreach($categories as $value)
+                    <x-category-slide :id="$value['id']" :name="$value['name']" :url="$value['img']"/>
                 @endforeach
             </div>
         </div>
@@ -65,24 +65,24 @@
 
     {{--各コンテンツ--}}
     <section id="contents_container" class="hidden justify-center items-center h-full w-full py-20">
-        @foreach($testArray as $value)
+        @foreach($categories as $value)
             <div class="hidden swiper swiper-{{$value['id']}} hideContainer" id="container_{{$value['id']}}">
                 <div class="swiper-wrapper">
-                    @if(empty($value['data']))
+                    @if(count($value->contents)==0)
                         <h1 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-4xl text-white z-100 font-bold">No Contents</h1>
                     @else
-                        @foreach($value['data'] as $idx=>$data)
+                        @foreach($value->contents as $val)
                             <div class="video-container relative swiper-slide overflow-hidden">
                                 <!-- Thumbnail Image -->
                                 <img
-                                    src="{{ asset('storage/img/' . $data['img']) }}"
+                                    src="{{ asset($val['img'])}}"
                                     alt="Video Thumbnail"
                                     class="thumbnail object-cover m-auto w-full h-full cursor-pointer absolute top-0 left-0 z-10"
-                                    onclick="playVideo(this,{{$idx}})"
+                                    onclick="playVideo(this)"
                                 >
 
                                 <!-- YouTube Player -->
-                                <div class="youtubePlayer w-full h-auto" data-id="{{$data['url']}}" style="display: none;"></div>
+                                <div class="youtubePlayer w-full h-auto" data-id="{{$val["id"]}}" data-url="{{$val['url']}}" style="display: none;"></div>
                             </div>
                         @endforeach
                     @endif
@@ -102,10 +102,13 @@
         function onYouTubeIframeAPIReady() {
             const elements = document.querySelectorAll('.youtubePlayer');
             elements.forEach((element) => {
+
+                let url = element.getAttribute('data-url');
+
                 const player = new YT.Player(element, {
                     height: '360',
                     width: '640',
-                    videoId: element.getAttribute('data-id'), // 動画 ID を取得
+                    videoId: getYouTubeVideoId(url), // 動画 ID を取得
                     playerVars: {
                         enablejsapi: 1,   // API を有効化
                         controls: 0,      // コントロールバーを非表示にする
@@ -115,8 +118,9 @@
                         'onStateChange': (event) => onPlayerStateChange(event, player),
                     },
                 });
-                playerArray.push(player);
+                playerArray.push({"player":player,"id":element.getAttribute('data-id')});
             });
+
         }
 
         function onPlayerStateChange(event,player) {
@@ -141,11 +145,17 @@
             imgElement.style.display = 'none';
             youtubePlayer.style.display = 'block';
             for (let i = 0; i < playerArray.length; i++) {
-                if (playerArray[i].options.videoId===youtubePlayer.getAttribute('data-id')) {
+                if (playerArray[i]["player"].options.videoId===getYouTubeVideoId(youtubePlayer.getAttribute('data-url')) &&playerArray[i]["id"]===youtubePlayer.getAttribute('data-id')) {
                     youtubePlayer.requestFullscreen();
-                    playerArray[i].playVideo();
+                    playerArray[i]["player"].playVideo();
                 }
             }
+        }
+
+        function getYouTubeVideoId(url) {
+            const regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/@tsparticles/preset-links@3/tsparticles.preset.links.bundle.min.js"></script>

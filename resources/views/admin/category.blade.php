@@ -1,5 +1,4 @@
 <x-app-layout>
-    @php()
     <div class="flex flex-col justify-center items-center w-full py-12">
         <!-- カテゴリー一覧表示 -->
         <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 md:mt-20 mt-8">

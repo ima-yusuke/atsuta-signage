@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller {
     // [ページ遷移] カテゴリー
@@ -18,10 +19,17 @@ class AdminController extends Controller {
 
     // [追加] カテゴリー
     public function AddCategory(Request $request) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:4096',
+        ], [], [
+            'name' => 'カテゴリー名',
+            'img' => 'カテゴリー画像',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator, 'add')->withInput();
+        }
+
         DB::beginTransaction();
         try {
             $category = new Category();
@@ -44,10 +52,17 @@ class AdminController extends Controller {
 
     // [更新] カテゴリー
     public function UpdateCategory(Request $request, $id) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required',
             'img' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
+        ], [], [
+            'name' => 'カテゴリー名',
+            'img' => 'カテゴリー画像',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator, 'update' . $id)->withInput();
+        }
+
         DB::beginTransaction();
         try {
             $category = Category::find($id);
@@ -115,12 +130,21 @@ class AdminController extends Controller {
 
     // [追加] コンテンツ
     public function AddContent(Request $request) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category_id' => 'required',
             'name' => 'required',
             'url' => 'required',
             'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:4096',
+        ], [], [
+            'category_id' => 'カテゴリー名',
+            'name' => '動画名',
+            'url' => '動画URL',
+            'img' => 'サムネイル画像',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator, 'add')->withInput();
+        }
+
         DB::beginTransaction();
         try {
             $content = new Content();
@@ -145,12 +169,21 @@ class AdminController extends Controller {
 
     // [更新] コンテンツ
     public function UpdateContent(Request $request, $id) {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'category_id' => 'required',
             'name' => 'required',
             'url' => 'required',
             'img' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
+        ], [], [
+            'category_id' => 'カテゴリー',
+            'name' => '動画名',
+            'url' => '動画URL',
+            'img' => 'サムネイル画像',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator, 'update')->withInput();
+        }
+
         DB::beginTransaction();
         try {
             $content = Content::find($id);

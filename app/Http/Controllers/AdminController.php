@@ -53,10 +53,10 @@ class AdminController extends Controller {
     // [更新] カテゴリー
     public function UpdateCategory(Request $request, $id) {
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
+            'name_' . $id => 'required',
             'img' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ], [], [
-            'name' => 'カテゴリー名',
+            'name_' . $id => 'カテゴリー名',
             'img' => 'カテゴリー画像',
         ]);
         if ($validator->fails()) {
@@ -67,8 +67,8 @@ class AdminController extends Controller {
         try {
             $category = Category::find($id);
             if ($category) {
-                if ($request->has('name')) {
-                    $category->name = $request->name;
+                if ($request->has('name_' . $id)) {
+                    $category->name = $request->input('name_' . $id);
                 }
                 // 画像更新
                 if ($request->hasFile('img')) {
@@ -123,7 +123,7 @@ class AdminController extends Controller {
 
     // [ページ遷移] コンテンツ
     function ShowContent() {
-        $contents = Content::orderBy('order', 'asc')->get();
+        $contents = Content::orderBy('category_id', 'asc')->orderBy('order', 'asc')->get();
         $categories = Category::orderBy('order', 'asc')->get();
         return view('admin.content', compact('contents', 'categories'));
     }
@@ -171,13 +171,13 @@ class AdminController extends Controller {
     public function UpdateContent(Request $request, $id) {
         $validator = Validator::make($request->all(), [
             'category_id' => 'required',
-            'name' => 'required',
-            'url' => 'required',
+            'name_' . $id => 'required',
+            'url_' . $id => 'required',
             'img' => 'image|mimes:jpeg,png,jpg,gif|max:4096',
         ], [], [
             'category_id' => 'カテゴリー',
-            'name' => '動画名',
-            'url' => '動画URL',
+            'name_' . $id => '動画名',
+            'url_' . $id => '動画URL',
             'img' => 'サムネイル画像',
         ]);
         if ($validator->fails()) {
@@ -192,11 +192,11 @@ class AdminController extends Controller {
                 if ($request->has('category_id')) {
                     $content->category_id = $request->category_id;
                 }
-                if ($request->has('name')) {
-                    $content->name = $request->name;
+                if ($request->has('name_' . $id)) {
+                    $content->name = $request->input('name_' . $id);
                 }
-                if ($request->has('url')) {
-                    $content->url = $request->url;
+                if ($request->has('url_' . $id)) {
+                    $content->url = $request->input('url_' . $id);
                 }
                 // 画像更新
                 if ($request->hasFile('img')) {

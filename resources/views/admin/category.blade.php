@@ -1,7 +1,8 @@
 <x-app-layout>
     <div class="flex flex-col justify-center items-center w-full py-12">
+        <p class="w-11/12 lg:w-10/12 text-2xl font-bold md:mt-20 mt-8 text-start">カテゴリー追加</p>
         <!-- カテゴリー一覧表示 -->
-        <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 md:mt-20 mt-8">
+        <div id="category-list" class="flex flex-col w-11/12 lg:w-10/12 mt-8">
             @if (session('success'))
                 <div id="success-alert" class="alert-area bg-green-100 border border-green-400 text-green-700 px-10 py-3 mb-4 rounded relative" role="alert">
                     <strong class="font-bold">{{ session('success') }}</strong>
@@ -30,8 +31,8 @@
                     <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>
                     <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
                 </button>
-                <div class="hidden md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $category->id)->has('name') || $errors->getBag('update' . $category->id)->has('img')) has-error @endif">
-                    @if ($errors->getBag('update' . $category->id)->has('name') || $errors->getBag('update' . $category->id)->has('img'))
+                <div class="hidden md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $category->id)->has('name_' . $category->id) || $errors->getBag('update' . $category->id)->has('img')) has-error @endif">
+                    @if ($errors->getBag('update' . $category->id)->has('name_' . $category->id) || $errors->getBag('update' . $category->id)->has('img'))
                         <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
                             <strong class="font-bold">入力された内容にエラーがあります。</strong>
                         </div>
@@ -43,9 +44,9 @@
                                 <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                 <div class="flex flex-col w-full md:flex-row items-center mt-1">
                                     <label for="name_{{ $category->id }}" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー名：</label>
-                                    <input type="text" name="name" id="name_{{ $category->id }}" value="{{ old('name', $category->name) }}" class="lg:w-96 md:w-72 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                    <input type="text" name="name_{{ $category->id }}" id="name_{{ $category->id }}" value="{{ old('name_' . $category->id, $category->name) }}" class="lg:w-96 md:w-72 w-9/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
                                 </div>
-                                @error('name', 'update' . $category->id)
+                                @error('name_' . $category->id, 'update' . $category->id)
                                 <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
                                 @enderror
                             </div>

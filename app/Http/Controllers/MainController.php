@@ -10,7 +10,7 @@ class MainController extends Controller
 
     public function ShowPage()
     {
-        $categories = Category::all();
+        $categories = Category::with('contents')->orderBy('order')->get();
         return view('main',compact('categories'));
     }
 }

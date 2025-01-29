@@ -103,79 +103,83 @@
                 $lastCategoryId = null; // 直前のカテゴリーID
             @endphp
             {{--既存コンテンツ--}}
-            @foreach ($contents as $content)
-                @if ($lastCategoryId !== $content->category_id)
-                    <p id="category-title-{{ $content->category_id }}" class="hidden category-title text-2xl font-bold text-start mb-8">{{ $content->category->name }}</p>
-                    @php
-                        $lastCategoryId = $content->category_id;
-                    @endphp
-                @endif
-                <button class="hidden video-contents w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200" data-content-category-id="{{ $content->category_id }}">
-                    <span class="w-full">{{ $content->name }}</span>
-                    <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>
-                    <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
-                </button>
-                <div class="hidden content-details md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id')) has-error @endif">
-                    @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id'))
-                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
-                            <strong class="font-bold">入力された内容にエラーがあります。</strong>
-                        </div>
+            <div id="sortable-content-list">
+                @foreach ($contents as $content)
+                    @if ($lastCategoryId !== $content->category_id)
+                        <p id="category-title-{{ $content->category_id }}" class="hidden category-title text-2xl font-bold text-start mb-8">{{ $content->category->name }}</p>
+                        @php
+                            $lastCategoryId = $content->category_id;
+                        @endphp
                     @endif
-                    <form id="content-form-{{ $content->id }}" method="POST" enctype="multipart/form-data" class="flex max-md:flex-col w-full h-full">
-                        @csrf
-                        <div class="flex flex-col w-full pb-4">
-                            <div class="flex flex-col w-full mt-3">
-                                <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
-                                <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="category_name_{{ $content->category_id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー名：</label>
-                                    <select name="category_id" id="category_id_{{ $content->category_id }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2">
-                                        @foreach($categories as $category)
-                                            <option value="{{ $category->id }}" {{ $content->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
-                                        @endforeach
-                                    </select>
+                    <div id="{{ $content->id }}" class="sortable-item">
+                        <button class="hidden video-contents w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200" data-content-category-id="{{ $content->category_id }}">
+                            <span class="w-full">{{ $content->name }}</span>
+                            <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>
+                            <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
+                        </button>
+                        <div class="hidden content-details md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id')) has-error @endif">
+                            @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id'))
+                                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
+                                    <strong class="font-bold">入力された内容にエラーがあります。</strong>
                                 </div>
-                                @error('category_id', 'update' . $content->id)
-                                <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="flex flex-col w-full mt-3">
-                                <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
-                                <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="name_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画名：</label>
-                                    <input type="text" name="name_{{ $content->id }}" id="name_{{ $content->id }}" value="{{ old('name_' . $content->id, $content->name) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                            @endif
+                            <form id="content-form-{{ $content->id }}" method="POST" enctype="multipart/form-data" class="flex max-md:flex-col w-full h-full">
+                                @csrf
+                                <div class="flex flex-col w-full pb-4">
+                                    <div class="flex flex-col w-full mt-3">
+                                        <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
+                                        <div class="flex flex-col w-full md:flex-row items-center mt-1">
+                                            <label for="category_name_{{ $content->category_id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー名：</label>
+                                            <select name="category_id" id="category_id_{{ $content->category_id }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2">
+                                                @foreach($categories as $category)
+                                                    <option value="{{ $category->id }}" {{ $content->category_id == $category->id ? 'selected' : '' }}>{{ $category->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @error('category_id', 'update' . $content->id)
+                                        <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="flex flex-col w-full mt-3">
+                                        <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
+                                        <div class="flex flex-col w-full md:flex-row items-center mt-1">
+                                            <label for="name_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画名：</label>
+                                            <input type="text" name="name_{{ $content->id }}" id="name_{{ $content->id }}" value="{{ old('name_' . $content->id, $content->name) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                        </div>
+                                        @error('name_' . $content->id, 'update' . $content->id)
+                                        <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="flex flex-col w-full mt-3">
+                                        <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
+                                        <div class="flex flex-col w-full md:flex-row items-center mt-1">
+                                            <label for="url_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画URL：</label>
+                                            <input type="text" name="url_{{ $content->id }}" id="url_{{ $content->id }}" value="{{ old('url_' . $content->id, $content->url) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                        </div>
+                                        @error('url_' . $content->id, 'update' . $content->id)
+                                        <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="flex flex-col w-full mt-3">
+                                        <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
+                                        <div class="flex flex-col w-full md:flex-row items-center mt-1">
+                                            <label for="img_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>サムネイル画像：</label>
+                                            <input type="file" name="img" id="img_{{ $content->id }}" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
+                                        </div>
+                                        @error('img', 'update' . $content->id)
+                                        <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
+                                        @enderror
+                                    </div>
                                 </div>
-                                @error('name_' . $content->id, 'update' . $content->id)
-                                <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="flex flex-col w-full mt-3">
-                                <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
-                                <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="url_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>動画URL：</label>
-                                    <input type="text" name="url_{{ $content->id }}" id="url_{{ $content->id }}" value="{{ old('url_' . $content->id, $content->url) }}" class="lg:w-96 md:w-72 w-10/12 bg-gray-50 border border-gray-300 text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500 block max-md:mt-3 p-2" />
+                                <div class="w-full md:mt-auto flex justify-center items-center max-md:my-5">
+                                    <button type="button" data-action="{{ route('UpdateContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:ms-auto md:me-10 md:mt-auto md:mb-4 me-3 hover:bg-gray-900 hover:text-white text-nowrap">更新</button>
+                                    <button type="button" data-action="{{ route('DeleteContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:me-10 md:mt-auto md:mb-4 ms-3 hover:bg-gray-900 hover:text-white text-nowrap">削除</button>
                                 </div>
-                                @error('url_' . $content->id, 'update' . $content->id)
-                                <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
-                                @enderror
-                            </div>
-                            <div class="flex flex-col w-full mt-3">
-                                <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
-                                <div class="flex flex-col w-full md:flex-row items-center mt-1">
-                                    <label for="img_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>サムネイル画像：</label>
-                                    <input type="file" name="img" id="img_{{ $content->id }}" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
-                                </div>
-                                @error('img', 'update' . $content->id)
-                                <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
-                                @enderror
-                            </div>
+                            </form>
                         </div>
-                        <div class="w-full md:mt-auto flex justify-center items-center max-md:my-5">
-                            <button type="button" data-action="{{ route('UpdateContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:ms-auto md:me-10 md:mt-auto md:mb-4 me-3 hover:bg-gray-900 hover:text-white text-nowrap">更新</button>
-                            <button type="button" data-action="{{ route('DeleteContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:me-10 md:mt-auto md:mb-4 ms-3 hover:bg-gray-900 hover:text-white text-nowrap">削除</button>
-                        </div>
-                    </form>
-                </div>
-            @endforeach
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
     <script>

@@ -97,6 +97,33 @@ class AdminController extends Controller {
         }
     }
 
+    // [更新] カテゴリー順番
+    public function UpdateCategoryOrder(Request $request) {
+        Log::info($request->orderData);
+        DB::beginTransaction();
+        try {
+            foreach ($request->orderData as $key => $array) {
+                $category = Category::find($array['id']);
+                if ($category) {
+                    $category->order = $key + 1;
+                    $category->save();
+                }
+            }
+            DB::commit();
+            return response()->json([
+                'message' => ' カテゴリーの順番が正常に更新されました',
+                'redirect' => route('ShowCategory')
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            return response()->json([
+                'message' => 'カテゴリーの順番を更新中にエラーが発生しました',
+                'redirect' => route('ShowCategory')
+            ]);
+        }
+    }
+
     // [削除] カテゴリー
     public function DeleteCategory($id) {
         DB::beginTransaction();
@@ -225,6 +252,35 @@ class AdminController extends Controller {
             Log::error($e);
             session()->flash('select_category', $request->input('category_id'));
             return redirect()->back()->with('error', '動画コンテンツ更新中にエラーが発生しました。');
+        }
+    }
+
+    // [更新] カテゴリー順番
+    public function UpdateContentOrder(Request $request) {
+        DB::beginTransaction();
+        try {
+            $category = null;
+            foreach ($request->orderData as $key => $array) {
+                $content = Content::find($array['id']);
+                if ($content) {
+                    $category = $content->category_id;
+                    $content->order = $key + 1;
+                    $content->save();
+                }
+            }
+            DB::commit();
+            session()->flash('select_category', $category);
+            return response()->json([
+                'message' => '動画コンテンツの順番が正常に更新されました',
+                'redirect' => route('ShowContent')
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e);
+            return response()->json([
+                'message' => '動画コンテンツの順番を更新中にエラーが発生しました',
+                'redirect' => route('ShowContent')
+            ]);
         }
     }
 

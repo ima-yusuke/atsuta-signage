@@ -1,4 +1,5 @@
 import '/resources/js/app.js';
+import Sortable from "sortablejs";
 
 // アコーディオンの切り替え
 document.querySelectorAll('.video-contents').forEach(button => {
@@ -106,4 +107,66 @@ document.addEventListener("DOMContentLoaded", () => {
             accordion.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     }
+
+    // 並び替え処理
+    const sortable = document.getElementById('sortable-content-list');
+    Sortable.create(sortable, {
+        animation: 150,
+        onSort: onSortEvent
+    });
 });
+
+function onSortEvent(e) {
+    UpdateOrder(e.target, "sortable-item", '/dashboard/update-content-order');
+}
+
+function UpdateOrder(target, selector, url) {
+    const items = target.querySelectorAll('.' + selector);
+    let orderData = [];
+
+    for (let i = 0; i < items.length; i++) {
+        let id = items[i].id;
+        orderData.push({ id: id, order: i + 1 });
+    }
+    UpdateContentOrderRequest(url, orderData);
+}
+
+function UpdateContentOrderRequest(url, orderData) {
+    FetchData(url, 'POST', true, JSON.stringify({
+        orderData: orderData,
+    }))
+        .then(data => {
+            console.log(data);
+            location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+function FetchData(url, method, headerData, bodyData) {
+    const headers = {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+    };
+    if (headerData) {
+        Object.assign(headers, {
+            'Content-Type': 'application/json'
+        });
+    }
+
+    return fetch(url, {
+        method: method,
+        headers: headers,
+        body: bodyData,
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            throw new Error(error.message);
+        });
+}

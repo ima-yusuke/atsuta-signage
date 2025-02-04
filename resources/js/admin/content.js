@@ -1,5 +1,4 @@
 import '/resources/js/app.js';
-import Sortable from "sortablejs";
 
 // アコーディオンの切り替え
 document.querySelectorAll('.video-contents').forEach(button => {

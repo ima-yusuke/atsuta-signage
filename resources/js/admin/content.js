@@ -87,6 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (selectedCategoryId) {
         const button = document.getElementById('category-list-' + selectedCategoryId);
         button.click();
+    } else {
+        const button = document.getElementById('category-list-0');
+        button.click();
     }
 
     // エラー時に該当アコーディオンを開く処理
@@ -116,10 +119,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function onSortEvent(e) {
-    UpdateOrder(e.target, "sortable-item", '/dashboard/update-content-order');
+    const draggedCategoryId = e.item.getAttribute('data-sort-category-id');
+    UpdateOrder(e.target, "sortable-item", '/dashboard/update-content-order', draggedCategoryId);
 }
 
-function UpdateOrder(target, selector, url) {
+function UpdateOrder(target, selector, url, draggedCategoryId) {
     const items = target.querySelectorAll('.' + selector);
     let orderData = [];
 
@@ -127,12 +131,13 @@ function UpdateOrder(target, selector, url) {
         let id = items[i].id;
         orderData.push({ id: id, order: i + 1 });
     }
-    UpdateContentOrderRequest(url, orderData);
+    UpdateContentOrderRequest(url, orderData, draggedCategoryId);
 }
 
-function UpdateContentOrderRequest(url, orderData) {
+function UpdateContentOrderRequest(url, orderData, draggedCategoryId) {
     FetchData(url, 'POST', true, JSON.stringify({
         orderData: orderData,
+        draggedCategoryId: draggedCategoryId
     }))
         .then(data => {
             console.log(data);

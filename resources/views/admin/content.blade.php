@@ -1,18 +1,18 @@
 <x-app-layout>
-    <div class="flex w-full pb-12">
+    <div class="flex flex-col md:flex-row w-full pb-12">
         {{--カテゴリー選択--}}
         <div id="selected-category" class="hidden" data-selected-category="{{ session('select_category') }}"></div>
-        <div class="side-nav fixed left-0 top-0 w-2/12 h-[100dvh] mt-16 bg-white overflow-y-auto">
-            <div class="sticky top-0 left-0 category-item flex flex-col items-center w-full mx-auto px-2 py-6 border-y border-solid bg-white hover:bg-gray-200 cursor-pointer" data-category-id="0">
-                <p class="font-semibold">新規登録</p>
+        <div class="side-nav md:fixed max-md:flex left-0 top-0 md:w-2/12 w-full md:h-[100dvh] h-20 md:mt-16 bg-white md:overflow-y-auto overflow-x-auto">
+            <div id="category-list-0" class="sticky top-0 left-0 category-item flex flex-col items-center md:w-full mx-auto md:px-2 md:py-6 px-6 py-2 border-y border-solid bg-white hover:bg-gray-200 cursor-pointer" data-category-id="0">
+                <p class="font-semibold max-md:my-auto max-md:whitespace-nowrap">新規登録</p>
             </div>
             @foreach($categories as $category)
-                <div id="category-list-{{ $category->id }}" class="category-item flex flex-col items-center w-full mx-auto px-3 py-6 border-y border-solid hover:bg-gray-200 cursor-pointer" data-category-id="{{ $category->id }}">
-                    <p class="font-semibold">{{ $category->name }}</p>
+                <div id="category-list-{{ $category->id }}" class="category-item flex flex-col items-center md:w-full mx-auto md:px-3 md:py-6 px-6 py-3 border-y border-solid hover:bg-gray-200 cursor-pointer" data-category-id="{{ $category->id }}">
+                    <p class="font-semibold max-md:my-auto max-md:whitespace-nowrap">{{ $category->name }}</p>
                 </div>
             @endforeach
         </div>
-        <div class="w-2/12"></div>
+        <div class="max-md:hidden w-2/12"></div>
         {{--コンテンツ一覧表示--}}
         <div id="content-list" class="flex flex-col w-9/12 lg:w-8/12 md:mt-32 mt-12 mx-auto">
             @if (session('success'))
@@ -38,8 +38,8 @@
                 </div>
             @endif
             {{--新規登録--}}
-            <p id="category-title-new" class="text-2xl font-bold text-start mb-8">動画コンテンツ追加</p>
-            <div id="new-content" class="md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid">
+            <p id="category-title-new" class="hidden text-2xl font-bold text-start mb-8">動画コンテンツ追加</p>
+            <div id="new-content" class="hidden md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid">
                 @if ($errors->add->any())
                     <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 my-4 rounded relative">
                         <strong class="font-bold">入力された内容にエラーがあります。</strong>
@@ -111,7 +111,7 @@
                             $lastCategoryId = $content->category_id;
                         @endphp
                     @endif
-                    <div id="{{ $content->id }}" class="sortable-item">
+                    <div id="{{ $content->id }}" class="sortable-item" data-sort-category-id="{{ $content->category_id }}">
                         <button class="hidden video-contents w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200" data-content-category-id="{{ $content->category_id }}">
                             <span class="w-full">{{ $content->name }}</span>
                             <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>

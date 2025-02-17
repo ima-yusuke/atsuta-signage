@@ -52,11 +52,25 @@
                                         <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
                                         @enderror
                                     </div>
-                                    <div class="flex flex-col w-full mt-12">
+                                    <div class="flex flex-col max-md:items-center w-full mt-12">
                                         <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                                         <div class="flex flex-col w-full md:flex-row items-center mt-1">
                                             <label for="img_{{ $category->id }}" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>カテゴリー画像：</label>
                                             <input type="file" name="img" id="img_{{ $category->id }}" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
+                                        </div>
+                                        {{-- 画像プレビュー --}}
+                                        <div class="flex flex-col md:flex-row gap-4 justify-center mt-3">
+                                            {{-- 現在登録されている画像 --}}
+                                            <div class="flex flex-col max-md:items-center w-full mt-3">
+                                                <label class="text-gray-900 text-nowrap">現在の画像：</label>
+                                                <img src="{{ asset($category->img) }}" alt="{{ $category->name }}" class="w-60" />
+                                            </div>
+
+                                            {{-- 選択した画像 --}}
+                                            <div id="preview-container_{{ $category->id }}" class="flex-col max-md:items-center w-full mt-3 hidden">
+                                                <label class="text-gray-900 text-nowrap">選択した画像：</label>
+                                                <img id="preview_{{ $category->id }}" src="" alt="選択した画像" class="w-60" />
+                                            </div>
                                         </div>
                                         @error('img', 'update' . $category->id)
                                         <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>

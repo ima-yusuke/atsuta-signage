@@ -166,6 +166,20 @@
                                             <label for="img_{{ $content->id }}" class="w-40 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>サムネイル画像：</label>
                                             <input type="file" name="img" id="img_{{ $content->id }}" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500" />
                                         </div>
+                                        {{--画像プレビュー--}}
+                                        <div class="flex flex-col md:flex-row gap-4 justify-center mt-3">
+                                            {{-- 現在登録されている画像 --}}
+                                            <div class="flex flex-col max-md:items-center w-full mt-3">
+                                                <label class="text-gray-900 text-nowrap">現在の画像：</label>
+                                                <img src="{{ asset($content->img) }}" alt="{{ $content->name }}" class="w-60" />
+                                            </div>
+
+                                            {{-- 選択した画像 --}}
+                                            <div id="preview-container_{{ $content->id }}" class="flex-col max-md:items-center w-full mt-3 hidden">
+                                                <label class="text-gray-900 text-nowrap">選択した画像：</label>
+                                                <img id="preview_{{ $content->id }}" src="" alt="選択した画像" class="w-60" />
+                                            </div>
+                                        </div>
                                         @error('img', 'update' . $content->id)
                                         <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>
                                         @enderror

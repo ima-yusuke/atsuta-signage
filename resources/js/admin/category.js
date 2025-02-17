@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortable = document.getElementById('sortable-category-list');
     Sortable.create(sortable, {
         animation: 150,
+        filter: 'input, select, textarea, .update-button, .delete-button',
+        preventOnFilter: false,
         onSort: onSortEvent
     });
 });

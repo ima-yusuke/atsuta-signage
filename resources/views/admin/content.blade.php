@@ -172,8 +172,8 @@
                                     </div>
                                 </div>
                                 <div class="w-full md:mt-auto flex justify-center items-center max-md:my-5">
-                                    <button type="button" data-action="{{ route('UpdateContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:ms-auto md:me-10 md:mt-auto md:mb-4 me-3 hover:bg-gray-900 hover:text-white text-nowrap">更新</button>
-                                    <button type="button" data-action="{{ route('DeleteContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="border border-gray-900 h-full px-4 py-3 rounded-xl md:me-10 md:mt-auto md:mb-4 ms-3 hover:bg-gray-900 hover:text-white text-nowrap">削除</button>
+                                    <button type="button" data-action="{{ route('UpdateContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="update-btn border border-gray-900 h-full px-4 py-3 rounded-xl md:ms-auto md:me-10 md:mt-auto md:mb-4 me-3 hover:bg-gray-900 hover:text-white text-nowrap">更新</button>
+                                    <button type="button" data-action="{{ route('DeleteContent', $content->id) }}" onclick="submitForm({{ $content->id }}, this)" class="delete-btn border border-gray-900 h-full px-4 py-3 rounded-xl md:me-10 md:mt-auto md:mb-4 ms-3 hover:bg-gray-900 hover:text-white text-nowrap">削除</button>
                                 </div>
                             </form>
                         </div>

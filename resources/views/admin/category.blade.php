@@ -111,8 +111,17 @@
                     <div class="flex flex-col w-full mt-12">
                         <p class="max-md:hidden bg-red-500 w-14 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</p>
                         <div class="flex flex-col md:flex-row items-center mt-1">
-                            <label for="img" class="w-48 pe-2 text-gray-900 text-nowrap"><span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>新規カテゴリー画像：</label>
-                            <input type="file" name="img" id="img" class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500">
+                            <label for="img_new" class="w-48 pe-2 text-gray-900 text-nowrap">
+                                <span class="md:hidden bg-red-500 w-14 my-auto me-2 px-2 py-[2px] text-xs text-white text-nowrap text-center rounded-xl">必須</span>
+                                新規カテゴリー画像：
+                            </label>
+                            <input type="file" name="img" id="img_new"
+                                   class="lg:w-96 md:w-72 w-10/12 max-md:mt-3 bg-gray-50 border border-gray-300 max-lg:text-sm max-md:text-xs text-gray-900 rounded-xl focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                        {{-- 新規カテゴリーの選択した画像 --}}
+                        <div id="preview-container_new" class="flex-col max-md:items-center w-full mt-3 hidden">
+                            <label class="text-gray-900 text-nowrap">選択した画像：</label>
+                            <img id="preview_new" src="" alt="選択した画像" class="w-60" />
                         </div>
                         @error('img', 'add')
                         <p class="text-red-500 text-sm mt-2 max-md:text-center">※{{ $message }}</p>

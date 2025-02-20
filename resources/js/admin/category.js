@@ -70,7 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // すべての input[type="file"] にイベントリスナーを設定
     document.querySelectorAll('input[type="file"]').forEach(input => {
         input.addEventListener('change', function (event) {
-            const id = input.getAttribute("id").replace("img_", ""); // idからcategoryのIDを取得
+            let id = input.getAttribute("id").replace("img_", ""); // idからcategoryのIDを取得
+            if (input.id === "img_new") {
+                id = "new"; // 新規カテゴリーの場合
+            }
             previewImage(event, id);
         });
     });

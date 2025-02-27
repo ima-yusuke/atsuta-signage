@@ -146,7 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const sortable = document.getElementById('sortable-content-list');
     Sortable.create(sortable, {
         animation: 150,
-        filter: 'input, select, textarea, .update-btn, .delete-btn',
+        draggable: '.sortable-item',
+        filter: 'input, select, textarea, .update-btn, .delete-btn, .category-title',
         preventOnFilter: false,
         onSort: onSortEvent
     });

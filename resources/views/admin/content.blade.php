@@ -15,6 +15,7 @@
         <div class="max-md:hidden w-2/12"></div>
         {{--コンテンツ一覧表示--}}
         <div id="content-list" class="flex flex-col w-9/12 lg:w-8/12 md:mt-32 mt-12 mx-auto">
+            {{--更新処理表示--}}
             @if (session('success'))
                 <div id="success-alert" class="alert-area bg-green-100 border border-green-400 text-green-700 px-10 py-3 mb-4 rounded relative" role="alert">
                     <strong class="font-bold">{{ session('success') }}</strong>
@@ -124,8 +125,8 @@
                     <div id="{{ $content->id }}" class="sortable-item" data-sort-category-id="{{ $content->category_id }}">
                         <button class="hidden video-contents w-full text-left mb-2 px-10 py-6 font-bold text-xl bg-white hover:bg-gray-200" data-content-category-id="{{ $content->category_id }}">
                             <span class="w-full">{{ $content->name }}</span>
-                            <i class="bi bi-chevron-up hidden text-2xl md:me-10 self-center"></i>
-                            <i class="bi bi-chevron-down text-2xl md:me-10 self-center"></i>
+                            <i class="bi bi-chevron-up opened hidden text-2xl md:me-10 self-center"></i>
+                            <i class="bi bi-chevron-down closed text-2xl md:me-10 self-center"></i>
                         </button>
                         <div class="hidden content-details md:px-10 md:py-3 px-2 py-1 bg-white border-t border-solid flex-col @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id')) has-error @endif">
                             @if ($errors->getBag('update' . $content->id)->has('name_' . $content->id) || $errors->getBag('update' . $content->id)->has('img') || $errors->getBag('update' . $content->id)->has('url_' . $content->id) || $errors->getBag('update' . $content->id)->has('category_id'))

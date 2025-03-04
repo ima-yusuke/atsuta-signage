@@ -3,15 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // アコーディオンの切り替え
     document.querySelectorAll('#sortable-category-list > .sortable-item > .categories').forEach(button => {
         button.addEventListener('click', () => {
-            const icons = button.querySelectorAll('i');
-            icons.forEach(icon => {
-                icon.classList.toggle('hidden');
-            });
-            button.classList.toggle('mb-2');
+            const opened = button.querySelector('.opened');
+            const closed = button.querySelector('.closed');
             const details = button.nextElementSibling;
-            details.classList.toggle('mb-2');
-            details.classList.toggle('hidden');
-            details.classList.toggle('flex');
+            const isClose = details.classList.contains('hidden');
+            opened.classList.toggle('hidden', !isClose);
+            closed.classList.toggle('hidden', isClose);
+            button.classList.toggle('mb-2', !isClose);
+            details.classList.toggle('mb-2', isClose);
+            details.classList.toggle('hidden', !isClose);
+            details.classList.toggle('flex', isClose);
         });
     });
 
@@ -82,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortable = document.getElementById('sortable-category-list');
     Sortable.create(sortable, {
         animation: 150,
-        filter: 'input, select, textarea, .update-btn, .delete-btn',
+        filter: '.category-detail',
         preventOnFilter: false,
         onSort: onSortEvent
     });

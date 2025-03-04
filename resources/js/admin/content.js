@@ -3,15 +3,16 @@ import '/resources/js/app.js';
 // アコーディオンの切り替え
 document.querySelectorAll('.video-contents').forEach(button => {
     button.addEventListener('click', () => {
-        const icons = button.querySelectorAll('i');
-        icons.forEach(icon => {
-            icon.classList.toggle('hidden');
-        });
-        button.classList.toggle('mb-2');
+        const opened = button.querySelector('.opened');
+        const closed = button.querySelector('.closed');
         const details = button.nextElementSibling;
-        details.classList.toggle('mb-2')
-        details.classList.toggle('hidden');
-        details.classList.toggle('flex');
+        const isClose = details.classList.contains('hidden');
+        opened.classList.toggle('hidden', !isClose);
+        closed.classList.toggle('hidden', isClose);
+        button.classList.toggle('mb-2', !isClose);
+        details.classList.toggle('mb-2', isClose);
+        details.classList.toggle('hidden', !isClose);
+        details.classList.toggle('flex', isClose);
     });
 });
 
@@ -147,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
     Sortable.create(sortable, {
         animation: 150,
         draggable: '.sortable-item',
-        filter: 'input, select, textarea, .update-btn, .delete-btn, .category-title',
+        filter: '.content-details, .category-title',
         preventOnFilter: false,
         onSort: onSortEvent
     });

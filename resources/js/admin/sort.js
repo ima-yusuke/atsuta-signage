@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     new Sortable(categoryList, {
+        animation: 150,
         group: 'categories',
         onEnd: updateOrder,
         handle: '.category-item',
@@ -65,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentLists = document.querySelectorAll('.content-list');
     contentLists.forEach(contentList => {
         new Sortable(contentList, {
+            animation: 150,
             group: 'contents',
             onEnd: updateOrder,
             handle: '.content-item',

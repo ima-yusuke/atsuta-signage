@@ -222,6 +222,5 @@
             form.submit();
         }
     </script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
     @vite('resources/js/admin/content.js')
 </x-app-layout>

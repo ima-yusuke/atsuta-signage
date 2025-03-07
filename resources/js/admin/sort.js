@@ -19,13 +19,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 children: [] // 子カテゴリーの並び順も送信
             });
 
-            // 子カテゴリーの並べ替え
-            item.querySelectorAll('.category-item').forEach((subItem, subIndex) => {
+            // 子カテゴリーの並べ替え (再帰的に処理)
+            item.querySelectorAll('.nested-category > .category-item').forEach((subItem, subIndex) => {
                 const subId = subItem.getAttribute('data-id');
                 categories[categories.length - 1].children.push({
                     id: subId,
                     order: subIndex,
                     parent_id: id
+                });
+
+                // 孫カテゴリー以下の処理 (さらに再帰的に)
+                subItem.querySelectorAll('.nested-category > .category-item').forEach((subSubItem, subSubIndex) => {
+                    const subSubId = subSubItem.getAttribute('data-id');
+                    categories[categories.length - 1].children[categories[categories.length - 1].children.length - 1].children.push({
+                        id: subSubId,
+                        order: subSubIndex,
+                        parent_id: subId
+                    });
                 });
             });
 

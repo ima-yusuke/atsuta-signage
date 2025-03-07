@@ -263,9 +263,9 @@ class AdminController extends Controller {
     }
 
     // [並び替え] カテゴリー順番
-    public function UpdateOrder(Request $request)
-    {
+    public function UpdateOrder(Request $request) {
         $categories = $request->input('categories');
+
         foreach ($categories as $categoryData) {
             $category = Category::find($categoryData['id']);
             $category->update([
@@ -279,8 +279,18 @@ class AdminController extends Controller {
                     $childCategory = Category::find($childData['id']);
                     $childCategory->update([
                         'order' => $childData['order'],
-                        'parent_id' => $categoryData['id'] // 親カテゴリーを更新
+                        'parent_id' => $categoryData['id']
                     ]);
+                    // 孫カテゴリー以下の処理
+                    if (isset($childData['children'])) {
+                        foreach ($childData['children'] as $subChildData) {
+                            $subChildCategory = Category::find($subChildData['id']);
+                            $subChildCategory->update([
+                                'order' => $subChildData['order'],
+                                'parent_id' => $childData['id']
+                            ]);
+                        }
+                    }
                 }
             }
         }

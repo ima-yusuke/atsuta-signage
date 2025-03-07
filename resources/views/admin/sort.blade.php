@@ -7,22 +7,12 @@
             @foreach ($categories as $category)
                 <li class="category-item w-full px-10 py-6 mt-4 text-xl bg-white border border-solid border-gray-300 rounded" data-id="{{ $category->id }}" data-parent-id="{{ $category->parent_id ?? 'null' }}">
                     <strong class="font-bold">{{ $category->name }}</strong>
-                    <ul class="nested-category">
-                        {{-- 子カテゴリー --}}
-                        @foreach ($category->children as $child)
-                            <li class="category-item" data-id="{{ $child->id }}" data-parent-id="{{ $child->parent_id }}">
-                                <strong>{{ $child->name }}</strong>
-                                <ul class="nested-category">
-                                    {{-- 孫カテゴリー --}}
-                                    @foreach ($child->children as $subChild)
-                                        <li class="category-item" data-id="{{ $subChild->id }}" data-parent-id="{{ $subChild->parent_id }}">
-                                            <strong>{{ $subChild->name }}</strong>
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
-                        @endforeach
-                    </ul>
+                    @if($category->children->isNotEmpty())
+                        <ul class="nested-category">
+                            {{-- 子カテゴリー --}}
+                            @include('admin.category-sort', ['categories' => $category->children])
+                        </ul>
+                    @endif
                     <ul class="content-list">
                         {{-- コンテンツ --}}
                         @foreach ($category->contents as $content)
